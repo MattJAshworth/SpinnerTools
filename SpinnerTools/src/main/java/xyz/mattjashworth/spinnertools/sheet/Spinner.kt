@@ -8,7 +8,6 @@ import android.graphics.PorterDuff
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
@@ -20,7 +19,7 @@ import xyz.mattjashworth.spinnertools.R
 import xyz.mattjashworth.spinnertools.sheet.enums.Mode
 
 @SuppressLint("PrivateResource")
-class Spinner<T>(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = 0) : LinearLayout(context, attributeSet) {
+class Spinner<T> @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = 0) : LinearLayout(context, attributeSet, defStyleAttr) {
 
     private var selectedItem: EditText
     private var card: CardView
@@ -341,4 +340,53 @@ class Spinner<T>(context: Context, attributeSet: AttributeSet? = null, defStyleA
         this.textInputLayout.hint = title
     }
 
+    fun setDismissWhenSelected(value : Boolean) {
+        dismissWhenSelected = value
+    }
+
+    fun setSelectMode(inMode : Mode) {
+        mode = inMode
+    }
+
+    fun setIsSearchable(value : Boolean) {
+        searchable = value
+    }
+
+    fun setBackgroundColorValue(colorId : Int) {
+        backgroundColor = colorId
+        card.setCardBackgroundColor(ContextCompat.getColor(context,colorId))
+    }
+
+    fun setTextAndIconColor(colorId: Int){
+        setHintColorValue(colorId)
+        setTextColorValue(colorId)
+        setIconColorValue(colorId)
+    }
+
+    fun setHintColorValue(colorId : Int) {
+        hintTextColor = colorId
+
+        val colorList = ColorStateList(
+            arrayOf(
+                intArrayOf()
+            ),
+            intArrayOf(
+                colorId
+            )
+        )
+
+        textInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(ContextCompat.getColor(context,colorId)))
+        textInputLayout.hintTextColor = ColorStateList.valueOf(ContextCompat.getColor(context,colorId))
+        textInputLayout.defaultHintTextColor = ColorStateList.valueOf(ContextCompat.getColor(context,colorId))
+    }
+
+    fun setTextColorValue(colorId : Int) {
+        textColor = colorId
+        textInputLayout.editText?.setTextColor(ContextCompat.getColor(context,colorId))
+    }
+    fun setIconColorValue(colorId : Int) {
+        iconColor = colorId
+        textInputLayout.setEndIconTintList(ColorStateList.valueOf(ContextCompat.getColor(context,colorId)))
+        textInputLayout.setEndIconTintMode(PorterDuff.Mode.SRC_IN)
+    }
 }
