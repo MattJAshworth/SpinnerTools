@@ -18,7 +18,7 @@ object SpinnerBindingAdapter {
 
     @JvmStatic
     @InverseBindingAdapter(attribute = "items")
-    fun <T> getItems(spinner: Spinner<T>) : ArrayList<T>? {
+    fun <T> getItems(spinner: Spinner<T>) : List<T>? {
         return spinner.itemsBinding
     }
 

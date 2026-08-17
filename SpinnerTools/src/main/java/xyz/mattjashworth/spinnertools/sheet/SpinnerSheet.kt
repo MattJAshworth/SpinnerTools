@@ -18,7 +18,7 @@ import xyz.mattjashworth.spinnertools.sheet.adapters.SearchSpinnerAdapter
 import xyz.mattjashworth.spinnertools.sheet.enums.Mode
 import java.lang.reflect.Modifier
 
-internal class SpinnerSheet<T>(context: Context, items: ArrayList<T>, title: String, displayMember: String?, searchable: Boolean, mode: Mode) {
+internal class SpinnerSheet<T>(context: Context, items: List<T>, title: String, displayMember: String?, searchable: Boolean, mode: Mode) {
 
 
     private var onSearchSpinnerClickListener: OnSearchSpinnerClickListener<T>? = null
@@ -26,9 +26,9 @@ internal class SpinnerSheet<T>(context: Context, items: ArrayList<T>, title: Str
 
     private var diag: BottomSheetDialog
     private var adapter: SearchSpinnerAdapter<T>
+    private lateinit var rcy: RecyclerView
 
-    val a = items.clone()
-    var filteredItems: ArrayList<T> = ArrayList(items.toList())
+    var filteredItems: ArrayList<T> = ArrayList(items)
 
     init {
 
@@ -41,7 +41,7 @@ internal class SpinnerSheet<T>(context: Context, items: ArrayList<T>, title: Str
         val sheetTitle = spinnerSheetView.findViewById<TextView>(R.id.tv_sheet_title)
         sheetTitle.text = title
 
-        val rcy = spinnerSheetView.findViewById<RecyclerView>(R.id.rcy_spinner_bottomsheet)
+        rcy = spinnerSheetView.findViewById(R.id.rcy_spinner_bottomsheet)
 
         val div = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         rcy.addItemDecoration(div)
@@ -78,10 +78,14 @@ internal class SpinnerSheet<T>(context: Context, items: ArrayList<T>, title: Str
 
         diag.behavior.peekHeight = calculatePeekHeightPercentage(context, items.count())
 
-        diag.behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        diag.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        diag.behavior.skipCollapsed = true
         diag.behavior.isDraggable = true
 
-
+        val selectedPos = adapter.getSelectedPosition()
+        if (selectedPos != -1) {
+            scrollToPos(selectedPos)
+        }
 
 
         diag.setCancelable(true)
@@ -98,10 +102,27 @@ internal class SpinnerSheet<T>(context: Context, items: ArrayList<T>, title: Str
 
     fun setSelectedObject(obj: T) {
         adapter.setSelectedPosition(obj)
+        val pos = adapter.getSelectedPosition()
+        if (pos != -1) {
+            scrollToPos(pos)
+        }
     }
 
     fun setSelectedObject(obj: List<T>) {
         adapter.setSelectedPosition(obj)
+        val pos = adapter.getSelectedPosition()
+        if (pos != -1) {
+            scrollToPos(pos)
+        }
+    }
+
+
+    private fun scrollToPos(position: Int) {
+        rcy.post {
+            val lm = rcy.layoutManager as? LinearLayoutManager
+            val centerOffset = rcy.height / 2
+            lm?.scrollToPositionWithOffset(position, centerOffset)
+        }
     }
 
     private fun calculatePeekHeightPercentage(context: Context, itemCount: Int, desiredPercentage: Float = 0.75f): Int {

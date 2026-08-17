@@ -93,14 +93,23 @@ internal class SearchSpinnerAdapter<T>(private val mode: Mode, items: ArrayList<
         }
     }
 
+    fun getSelectedPosition(): Int {
+        return selectedPosition
+    }
+
     fun setSelectedPosition(obj: T) {
         val idx = spinnerItems.indexOf(obj)
         selectedPosition = idx
+        notifyDataSetChanged()
     }
 
     fun setSelectedPosition(objs: List<T>) {
         selectedPositions.clear()
         selectedPositions.addAll(objs)
+        if (objs.isNotEmpty()) {
+            selectedPosition = spinnerItems.indexOf(objs[0])
+        }
+        notifyDataSetChanged()
     }
 
 

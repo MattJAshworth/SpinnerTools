@@ -24,9 +24,9 @@ class Spinner<T> @JvmOverloads constructor(context: Context, attributeSet: Attri
     private var selectedItem: EditText
     private var card: CardView
 
-    private var _items = ArrayList<T>()
-    var itemsBinding: ArrayList<T> = _items
-    var itemsValueChanged: ((ArrayList<T>) -> Unit)? = null
+    private var _items = listOf<T>()
+    var itemsBinding: List<T> = _items
+    var itemsValueChanged: ((List<T>) -> Unit)? = null
 
     private var _selectedObject: T? = null
     var selectedObject: T?
@@ -327,7 +327,7 @@ class Spinner<T> @JvmOverloads constructor(context: Context, attributeSet: Attri
         }
     }
 
-    fun setItems(_items: ArrayList<T>) {
+    fun setItems(_items: List<T>) {
         this@Spinner._items = _items
     }
 

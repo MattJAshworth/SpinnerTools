@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
 
-    var data : ArrayList<ExampleObject> = ArrayList()
+    var data : List<ExampleObject> = listOf()
 
     var multiSelectData : List<ExampleMultiSelect> = ArrayList()
 
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         val ex = ExampleObject("Test", "Should Be Working")
         ex.ID = 5
 
-        data = arrayListOf(
+        data = listOf(
             ex,
             ExampleObject("Mohammed", "35"),
             ExampleObject("Charlie", "24"),
